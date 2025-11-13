@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>🚦 Intelligent Traffic Management System</title>
+        <!-- Loads network visualization library for drawing graphs and connections -->
+        <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+        <!--  Imports modern font styling to make text look better -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🚦 INTELLIGENT TRAFFIC MANAGEMENT SYSTEM</h1>
+                <p>Data Structures & Algorithms Project | Real-time Emergency Vehicle Routing</p>
+            </div>
+
+            <div class="main-grid">
+                <div class="network-section">
+                    <div class="section-header">
+                        <span class="section-icon">🗺️</span>
+                        <h3>City Traffic Network Visualization</h3>
+                    </div>
+                    <div id="network"></div>
+                
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-marker marker-emergency"></div>
+                                <span>Emergency Station</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-marker marker-landmark"></div>
+                            <span>Major Landmark</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-marker marker-source"></div>
+                            <span>Source Point</span>
+                         </div>
+                        <div class="legend-item">
+                            <div class="legend-marker marker-destination"></div>
+                            <span>Destination Point</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-marker marker-path"></div>
+                            <span>Optimal Path</span>
+                        </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </body>
+</html>
