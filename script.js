@@ -587,3 +587,29 @@ function displayAllPossibleRoutesResults(allPaths, source) {
                     <span style="color: #8b5cf6; font-size: 1.5em; font-weight: 800;">${Object.keys(allPaths).length}</span>
                 </div>
     `;
+
+        html += `
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">REACHABLE NODES:</strong><br>
+                    <span style="color: #10b981; font-size: 1.4em; font-weight: 700;">${Object.values(allPaths).filter(path => path.totalTime !== INF).length}</span>
+                </div>
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">UNREACHABLE NODES:</strong><br>
+                    <span style="color: #ef4444; font-size: 1.4em; font-weight: 700;">${Object.values(allPaths).filter(path => path.totalTime === INF).length}</span>
+                </div>
+            </div>
+        </div>
+
+        <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.4em;">📍 All Available Routes</h3>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Destination</th>
+                    <th>Type</th>
+                    <th>Travel Time</th>
+                    <th>Route Preview</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    
