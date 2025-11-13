@@ -401,12 +401,14 @@ body {
     100% { transform: rotate(360deg); }
 }
 
+
 .loading-text {
     color: #8b5cf6;
     font-size: 1.2em;
     font-weight: 600;
 }
 .legend {
+
     display: flex;
     gap: 25px;
     margin-top: 25px;
@@ -415,6 +417,7 @@ body {
     background: rgba(255,255,255,0.5);
     border-radius: 15px;
 }
+
 
 .legend-item {
     display: flex;
@@ -431,6 +434,8 @@ body {
     border-radius: 50%;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
+
+
 
 .marker-emergency { background: #ef4444; }
 .marker-landmark { background: #3b82f6; }
