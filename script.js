@@ -133,6 +133,51 @@ Array(this.numVertices.fill("");
   }
  }
   
+const result = newPathInfo();
+ if (distance[destination]===INF){
+  return result;
+ }
 
+ result.totalTime=distance[destination];
+
+ const pathStack = [];
+ const roadStack = [];
+ let current = destination;
+ 
+ while(current !== -1){
+  pathStack.push(current);
+  if (parent[current] !== -1){
+   roadStack.push(roadUsed[current]);
+  }
+  current = parent[current];
+ }
+
+ result.path = pathStack.reverse();
+ result.roads = roadStack.reverse();
+
+ return result;
+}
+
+ findAllPaths(source,destination){
+  const allPaths = {};
+  for(const dest of destinations){
+   if (dest !==source){
+    allPaths[dest] = this.dijkstra(source'dest);
+   }
+  }
+  return allPaths;
+ }
+
+ findAllPossiblePaths(source){
+  const allPaths = {};
+  for (let dest = 0; dest < this.numVertices;dest++){
+   if(dest !== sorce){
+    allPaths[dest] = this.dijkstra(sorce,dest);
+   }
+  }
+  return allPaths;
+ }
+
+ 
  
  
