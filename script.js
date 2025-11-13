@@ -547,3 +547,23 @@ function displayRouteResults(pathInfo, source, dest) {
     resultsDiv.innerHTML = html;
     document.getElementById('resultsPanel').style.display = 'block';
 }
+
+function handleAllPossibleRoutes() {
+    const source = parseInt(document.getElementById('source').value);
+
+    if (source < 0 || source > 44) {
+        alert('Please enter a valid source ID (0-44)!');
+        return;
+    }
+
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('resultsPanel').style.display = 'none';
+
+    setTimeout(() => {
+        const allPaths = cityNetwork.findAllPossiblePaths(source);
+
+        document.getElementById('loading').style.display = 'none';
+        displayAllPossibleRoutesResults(allPaths, source);
+        visualizeGraph(null, source, null);
+    }, 800);
+}
