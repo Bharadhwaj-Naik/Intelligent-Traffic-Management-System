@@ -307,3 +307,116 @@ function initializeComplexCity(graph) {
     graph.addEdge(43, 15, 6, "School-Residential North");
     graph.addEdge(44, 16, 6, "College-Residential East");
 } 
+
+// ==================== VISUALIZATION ====================
+function visualizeGraph(pathInfo = null, source = null, destination = null) {
+    const nodesArray = [];
+    const edgesArray = [];
+
+    for (let i = 0; i < cityNetwork.nodes.length; i++) {
+        const node = cityNetwork.nodes[i];
+        let color = '#94a3b8';
+        let size = 20;
+
+        if (node.type === 'emergency_station') {
+            color = '#ef4444';
+            size = 30;
+        } else if (node.type === 'landmark') {
+            color = '#3b82f6';
+            size = 25;
+        }
+
+        if (source !== null && i === source) {
+            color = '#f59e0b';
+            size = 35;
+        }
+        if (destination !== null && i === destination) {
+            color = '#8b5cf6';
+            size = 35;
+        }
+
+        if (pathInfo && pathInfo.path.includes(i) && i !== source && i !== destination) {
+            color = '#10b981';
+            size = 28;
+        }
+
+        nodesArray.push({
+            id: i,
+            label: `${i}`,
+            title: node.name,
+            color: color,
+            size: size,
+            font: { size: 14, color: '#fff', face: 'Poppins', bold: true }
+        });
+    }
+
+    const addedEdges = new Set();
+    for (const [from, edgeList] of Object.entries(cityNetwork.adjacencyList)) {
+        for (const edge of edgeList) {
+            const edgeKey = `${Math.min(from, edge.to)}-${Math.max(from, edge.to)}`;
+            if (!addedEdges.has(edgeKey)) {
+                addedEdges.add(edgeKey);
+
+                let color = '#cbd5e1';
+                let width = 2;
+
+                if (pathInfo && pathInfo.path.length > 0) {
+                    for (let i = 0; i < pathInfo.path.length - 1; i++) {
+                        if ((pathInfo.path[i] == from && pathInfo.path[i + 1] == edge.to) ||
+                            (pathInfo.path[i] == edge.to && pathInfo.path[i + 1] == from)) {
+                            color = '#10b981';
+                            width = 6;
+                            break;
+                        }
+                    }
+                }
+
+                edgesArray.push({
+                    from: parseInt(from),
+                    to: edge.to,
+                    label: `${edge.weight}m`,
+                    title: edge.roadName,
+                    color: { color: color },
+                    width: width,
+                    font: { size: 11, color: '#64748b', face: 'Poppins' }
+                });
+            }
+        }
+    }
+
+    const nodes = new vis.DataSet(nodesArray);
+    const edges = new vis.DataSet(edgesArray);
+
+    const container = document.getElementById('network');
+    const data = { nodes: nodes, edges: edges };
+    const options = {
+        physics: {
+            enabled: true,
+            barnesHut: {
+                gravitationalConstant: -10000,
+                centralGravity: 0.3,
+                springLength: 200,
+                springConstant: 0.04
+            },
+            stabilization: { iterations: 250 }
+        },
+        interaction: {
+            hover: true,
+            tooltipDelay: 100,
+            dragView: true,
+            zoomView: false
+        },
+        nodes: {
+            shape: 'dot',
+            borderWidth: 3,
+            borderWidthSelected: 4
+        },
+        edges: {
+            smooth: { type: 'continuous' }
+        }
+    };
+
+    visNetwork = new vis.Network(container, data, options);
+}
+
+
