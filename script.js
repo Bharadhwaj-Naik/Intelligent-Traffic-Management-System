@@ -499,3 +499,28 @@ function displayRouteResults(pathInfo, source, dest) {
                     <span style="color: #8b5cf6; font-size: 1.2em; font-weight: 700;">${cityNetwork.getNodeName(dest)}</span>
                 </div>
     `;
+
+
+    html += `
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">TOTAL TIME:</strong><br>
+                    <span style="color: #ef4444; font-size: 1.5em; font-weight: 800;">${pathInfo.totalTime} min</span>
+                </div>
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">INTERSECTIONS:</strong><br>
+                    <span style="color: #10b981; font-size: 1.4em; font-weight: 700;">${pathInfo.path.length}</span>
+                </div>
+            </div>
+        </div>
+
+        <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.4em;">📍 Step-by-Step Route</h3>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Step</th>
+                    <th>Location</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
