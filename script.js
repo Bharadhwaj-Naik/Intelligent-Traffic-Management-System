@@ -445,3 +445,36 @@ window.onload = function() {
     initializeSystem();
     console.log('✓ System ready!');
 };
+
+
+
+function handleSingleRoute() {
+    const source = parseInt(document.getElementById('source').value);
+    const dest = parseInt(document.getElementById('target').value);
+
+    if (source < 0 || source > 44 || dest < 0 || dest > 44) {
+        alert('Invalid intersection IDs! Must be between 0-44.');
+        return;
+    }
+
+    if (source === dest) {
+        alert('Source and destination cannot be the same!');
+        return;
+    }
+
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('resultsPanel').style.display = 'none';
+
+    setTimeout(() => {
+        const pathInfo = cityNetwork.dijkstra(source, dest);
+        document.getElementById('loading').style.display = 'none';
+
+        if (pathInfo.totalTime === INF) {
+            alert('No path exists between these intersections!');
+            return;
+        }
+
+        visualizeGraph(pathInfo, source, dest);
+        displayRouteResults(pathInfo, source, dest);
+    }, 500);
+}
