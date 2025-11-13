@@ -656,3 +656,49 @@ function handleFloydWarshall() {
         displayFloydWarshallResults(allPairsDistances);
     }, 500);
 }
+
+function displayFloydWarshallResults(distances) {
+    const resultsDiv = document.getElementById('results');
+
+    let html = `
+        <div class="section-header">
+            <span class="section-icon">🔄</span>
+            <h3>Floyd-Warshall All-Pairs Shortest Paths</h3>
+        </div>
+        <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 25px; border-radius: 18px; margin-bottom: 25px; border: 3px solid #f59e0b;">
+            <p style="color: #78350f; font-weight: 600; font-size: 1.1em;">
+                ✓ Complete distance matrix calculated successfully!<br>
+                Total computations: <strong>${45 * 45} pairs</strong>
+            </p>
+        </div>
+
+        <h3 style="color: #1e293b; margin-bottom: 20px;">Sample Results (First 10 nodes)</h3>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Distance</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    for (let i = 0; i < Math.min(10, distances.length); i++) {
+        for (let j = 0; j < Math.min(10, distances[i].length); j++) {
+            if (i !== j && distances[i][j] !== INF) {
+                html += `
+                    <tr>
+                        <td><strong>${i}</strong></td>
+                        <td><strong>${j}</strong></td>
+                        <td class="time-cell">${distances[i][j]} min</td>
+                    </tr>
+                `;
+            }
+        }
+    }
+
+    html += `</tbody></table>`;
+    resultsDiv.innerHTML = html;
+    document.getElementById('resultsPanel').style.display = 'block';
+}
