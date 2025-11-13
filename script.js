@@ -644,3 +644,15 @@ function displayAllPossibleRoutesResults(allPaths, source) {
     resultsDiv.innerHTML = html;
     document.getElementById('resultsPanel').style.display = 'block';
 }
+
+
+function handleFloydWarshall() {
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('resultsPanel').style.display = 'none';
+
+    setTimeout(() => {
+        const allPairsDistances = cityNetwork.floydWarshall();
+        document.getElementById('loading').style.display = 'none';
+        displayFloydWarshallResults(allPairsDistances);
+    }, 500);
+}
