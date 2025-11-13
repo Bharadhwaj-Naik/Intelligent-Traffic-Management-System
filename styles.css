@@ -406,3 +406,62 @@ body {
     font-size: 1.2em;
     font-weight: 600;
 }
+.legend {
+    display: flex;
+    gap: 25px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+    padding: 20px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95em;
+    color: #475569;
+    font-weight: 600;
+}
+
+.legend-marker {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.marker-emergency { background: #ef4444; }
+.marker-landmark { background: #3b82f6; }
+.marker-path { background: #10b981; }
+.marker-source { background: #f59e0b; }
+.marker-destination { background: #8b5cf6; }
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    border-radius: 10px;
+}
+
+@media (max-width: 1200px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .header h1 {
+        font-size: 2em;
+    }
+
+    .nodes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
