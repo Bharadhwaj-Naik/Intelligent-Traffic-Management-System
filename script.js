@@ -524,3 +524,26 @@ function displayRouteResults(pathInfo, source, dest) {
             </thead>
             <tbody>
     `;
+
+        for (let i = 0; i < pathInfo.path.length; i++) {
+        const nodeId = pathInfo.path[i];
+        html += `
+            <tr>
+                <td><strong>${i + 1}</strong></td>
+                <td class="path-cell">${cityNetwork.getNodeName(nodeId)}</td>
+                <td>
+        `;
+        
+        if (i < pathInfo.roads.length) {
+            html += `Take <strong>${pathInfo.roads[i]}</strong>`;
+        } else {
+            html += `<span style="color: #10b981; font-weight: 700;">🎯 Destination Reached</span>`;
+        }
+        
+        html += `</td></tr>`;
+    }
+
+    html += `</tbody></table>`;
+    resultsDiv.innerHTML = html;
+    document.getElementById('resultsPanel').style.display = 'block';
+}
