@@ -1,237 +1,151 @@
- const INF = Number.MAX_SAFE_INTEGER;
-
-        class Node {
-            constructor(id, name, type) {
-                this.id = id;
-                this.name = name;
-                this.type = type;
-            }
-        }
-
-        class Edge {
-            constructor(to, weight, roadName) {
-                this.to = to;
-                this.weight = weight;
-                this.roadName = roadName;
-            }
-        }
-        class HeapNode {
-            constructor(vertex, distance) {
-                this.vertex = vertex;
-                this.distance = distance;
-            }
-        }
-
-        class MinHeap {
-            constructor() {
-                this.heap = [];
-            }
-
-            push(vertex, distance) {
-                this.heap.push(new HeapNode(vertex, distance));
-                this.bubbleUp(this.heap.length - 1);
-            }
-
-            pop() {
-                if (this.heap.length === 0) return null;
-                if (this.heap.length === 1) return this.heap.pop();
-
-                const min = this.heap[0];
-                this.heap[0] = this.heap.pop();
-                this.bubbleDown(0);
-                return min;
-            }
-
-            bubbleUp(index) {
-                while (index > 0) {
-                    const parentIndex = Math.floor((index - 1) / 2);
-                    if (this.heap[index].distance >= this.heap[parentIndex].distance) break;
-                    [this.heap[index], this.heap[parentIndex]] = [this.heap[parentIndex], this.heap[index]];
-                    index = parentIndex;
-                }
-            }
-
-            bubbleDown(index) {
-                while (true) {
-                    let minIndex = index;
-                    const leftChild = 2 * index + 1;
-                    const rightChild = 2 * index + 2;
-
-                    if (leftChild < this.heap.length && this.heap[leftChild].distance < this.heap[minIndex].distance) {
-                        minIndex = leftChild;
-                    }
-                    if (rightChild < this.heap.length && this.heap[rightChild].distance < this.heap[minIndex].distance) {
-                        minIndex = rightChild;
-                    }
-                    if (minIndex === index) break;
-
-                    [this.heap[index], this.heap[minIndex]] = [this.heap[minIndex], this.heap[index]];
-                    index = minIndex;
-                }
-            }
-
-            isEmpty() {
-                return this.heap.length === 0;
-            }
-        }
-        class PathInfo {
-            constructor() {
-                this.path = [];
-                this.totalTime = INF;
-                this.roads = [];
-            }
-        }
-
-class TrafficGraph{
- constructor(numVertices){
-  this.numVertices = numVertices;
-  this.nodes = [];
-  this.adjacencyList = {}
-  this.nameTold = {};
- }
-
-addVertex(id,name,type){
- this.nodes.push(new Node(id,name,type));
- this.nameTold[name] = id;
- this.adjacencyList[id] = [];
-}
-
-addEdge(from,to,weight,roadName){
- this.adacencyList[from].push(new Edge(to,weight,roadName));
-this.adjacencyList[to].push(new Edge(from,weight,roadName));
-}
-
-dijkstra(source,destination){
- const distance = new
-Array(this.numVertices.).fill(INF);
- const parent = new
-Array(this.numVertices).fill(-1);
- const roadUsed = new
-Array(this.numVertices.fill("");
- const minHeap = new MinHeap();
-
- distance[source] = 0;
- minHeap.push(source,0);
-
- while(!minHeap.isEmpty()){
-  const current = minHeap.pop();
-  const u = current.vertex;
-
-  if(current.distance > distance[u])
-   continue;
-
-  for (const edge of this.adjacencyList[u]){
-   const v = edge.to;
-   const weight = edge.weight;
-
-   if(distance[u] +weight<distance[v]){
-    distance[v]=distance[u]+weight;
-    parent[v] = u;
-    roadUsed[v]=edge.roadName;
-    minHeap.push(v,distance[v]);
-   }
-  }
- }
-  
-const result = newPathInfo();
- if (distance[destination]===INF){
-  return result;
- }
-
- result.totalTime=distance[destination];
-
- const pathStack = [];
- const roadStack = [];
- let current = destination;
- 
- while(current !== -1){
-  pathStack.push(current);
-  if (parent[current] !== -1){
-   roadStack.push(roadUsed[current]);
-  }
-  current = parent[current];
- }
-
- result.path = pathStack.reverse();
- result.roads = roadStack.reverse();
-
- return result;
-}
-
- findAllPaths(source,destination){
-  const allPaths = {};
-  for(const dest of destinations){
-   if (dest !==source){
-    allPaths[dest] = this.dijkstra(source'dest);
-   }
-  }
-  return allPaths;
- }
-
- findAllPossiblePaths(source){
-  const allPaths = {};
-  for (let dest = 0; dest < this.numVertices;dest++){
-   if(dest !== sorce){
-    allPaths[dest] = this.dijkstra(sorce,dest);
-   }
-  }
-  return allPaths;
- }
-
- floydWarshall(){
-  const dist = Array.from({length:this.numVertices},() =>
-   new Array(this.numVertices).fill(INF));
-
-  for(let i=0; i< this.numvertices;i++){
-   dist[i][i] = 0;
-  }
-
-  for(let u = 0;u < this.numVertices; u++){
-   for (const edge of this.adjacencyList{u]){
-    dist[u][edge.to] = math.min(dist{u][edge.to],edge.weight);
-   }
-  }
-
-  for(let k + 0;k < this.numVertices; k++){
-   for(let i = 0;i < this.numVertices; i++){
-    for(let j = 0;j < this.numVertices; j++){
-     if (dist[i][k] !== INF && dist[k][j] !==INF){
-      dist[i][j] = Math.min(dist[i]j, dist[i][k]+dist[k][j]);
-     }
+// ==================== GRAPH CLASS (C++ EQUIVALENT) ====================
+class TrafficGraph {
+    constructor(numVertices) {
+        this.numVertices = numVertices;
+        this.nodes = [];
+        this.adjacencyList = {};
+        this.nameToId = {};
     }
-   }
-  }
 
-  return dist;
- }
+    addVertex(id, name, type) {
+        this.nodes.push(new Node(id, name, type));
+        this.nameToId[name] = id;
+        this.adjacencyList[id] = [];
+    }
 
- getNodeType(id){
-  return this.node[id] ? this.nodes[id].type : "unknown";
- }
+    addEdge(from, to, weight, roadName) {
+        this.adjacencyList[from].push(new Edge(to, weight, roadName));
+        this.adjacencyList[to].push(new Edge(from, weight, roadName));
+    }
 
- displayNodes(){
-  const nodesGrid + document.getElementByld('nodesGrid');
-  nodesGrid.innerHTML = ';
+    dijkstra(source, destination) {
+        const distance = new Array(this.numVertices).fill(INF);
+        const parent = new Array(this.numVertices).fill(-1);
+        const roadUsed = new Array(this.numVertices).fill("");
+        const minHeap = new MinHeap();
 
-  for(const node of thid.nodes){
-   const nodecard = document.createElement('div');
-   node.Card.className = node-card
-   ${node.type === 'emergency_station'?'emergency':"}${node.type==='landmark'? 'landmark':"};
+        distance[source] = 0;
+        minHeap.push(source, 0);
 
-   nodeCard.innerHTML = `
-   <div class='node-id">${node.id}</div>
-   <div calss="node-name">${node.name}</div>
-   <div class="node-type">
-   ${node.type.replace('_','')}</div>
-   `;
+        while (!minHeap.isEmpty()) {
+            const current = minHeap.pop();
+            const u = current.vertex;
 
-   nodesGrid.appendchild(nodeCard);
-  }
- }
+            if (current.distance > distance[u]) continue;
+
+            for (const edge of this.adjacencyList[u]) {
+                const v = edge.to;
+                const weight = edge.weight;
+
+                if (distance[u] + weight < distance[v]) {
+                    distance[v] = distance[u] + weight;
+                    parent[v] = u;
+                    roadUsed[v] = edge.roadName;
+                    minHeap.push(v, distance[v]);
+                }
+            }
+        }
+
+        const result = new PathInfo();
+        if (distance[destination] === INF) {
+            return result;
+        }
+
+        result.totalTime = distance[destination];
+
+        const pathStack = [];
+        const roadStack = [];
+        let current = destination;
+
+        while (current !== -1) {
+            pathStack.push(current);
+            if (parent[current] !== -1) {
+                roadStack.push(roadUsed[current]);
+            }
+            current = parent[current];
+        }
+
+        result.path = pathStack.reverse();
+        result.roads = roadStack.reverse();
+
+        return result;
+    }
+
+    findAllPaths(source, destinations) {
+        const allPaths = {};
+        for (const dest of destinations) {
+            if (dest !== source) {
+                allPaths[dest] = this.dijkstra(source, dest);
+            }
+        }
+        return allPaths;
+    }
+
+    findAllPossiblePaths(source) {
+        const allPaths = {};
+        for (let dest = 0; dest < this.numVertices; dest++) {
+            if (dest !== source) {
+                allPaths[dest] = this.dijkstra(source, dest);
+            }
+        }
+        return allPaths;
+    }
+
+    floydWarshall() {
+        const dist = Array.from({length: this.numVertices}, () => 
+            new Array(this.numVertices).fill(INF));
+
+        for (let i = 0; i < this.numVertices; i++) {
+            dist[i][i] = 0;
+        }
+
+        for (let u = 0; u < this.numVertices; u++) {
+            for (const edge of this.adjacencyList[u]) {
+                dist[u][edge.to] = Math.min(dist[u][edge.to], edge.weight);
+            }
+        }
+
+        for (let k = 0; k < this.numVertices; k++) {
+            for (let i = 0; i < this.numVertices; i++) {
+                for (let j = 0; j < this.numVertices; j++) {
+                    if (dist[i][k] !== INF && dist[k][j] !== INF) {
+                        dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+                    }
+                }
+            }
+        }
+
+        return dist;
+    }
+
+    getNodeName(id) {
+        return this.nodes[id] ? this.nodes[id].name : "Unknown";
+    }
+
+    getNodeType(id) {
+        return this.nodes[id] ? this.nodes[id].type : "unknown";
+    }
+
+    displayNodes() {
+        const nodesGrid = document.getElementById('nodesGrid');
+        nodesGrid.innerHTML = '';
+
+        for (const node of this.nodes) {
+            const nodeCard = document.createElement('div');
+            nodeCard.className = `node-card ${node.type === 'emergency_station' ? 'emergency' : ''} ${node.type === 'landmark' ? 'landmark' : ''}`;
+            
+            nodeCard.innerHTML = `
+                <div class="node-id">${node.id}</div>
+                <div class="node-name">${node.name}</div>
+                <div class="node-type">${node.type.replace('_', ' ')}</div>
+            `;
+            
+            nodesGrid.appendChild(nodeCard);
+        }
+    }
 }
- 
-    
 
+// ==================== CITY INITIALIZATION (C++ EQUIVALENT) ====================
 function initializeComplexCity(graph) {
     // Emergency Stations
     graph.addVertex(0, "Central Command HQ", "emergency_station");
@@ -392,7 +306,4 @@ function initializeComplexCity(graph) {
     graph.addEdge(43, 44, 4, "School-College Link");
     graph.addEdge(43, 15, 6, "School-Residential North");
     graph.addEdge(44, 16, 6, "College-Residential East");
-}
- 
- 
- 
+} 
