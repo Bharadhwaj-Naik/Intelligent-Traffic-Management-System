@@ -419,4 +419,29 @@ function visualizeGraph(pathInfo = null, source = null, destination = null) {
     visNetwork = new vis.Network(container, data, options);
 }
 
+let cityNetwork;
+let visNetwork;
 
+// ==================== INITIALIZATION ====================
+function initializeSystem() {
+    cityNetwork = new TrafficGraph(45);
+    initializeComplexCity(cityNetwork);
+    
+    let totalEdges = 0;
+    for (const edgeList of Object.values(cityNetwork.adjacencyList)) {
+        totalEdges += edgeList.length;
+    }
+    totalEdges = totalEdges / 2;
+
+    document.getElementById('stat-roads').textContent = totalEdges;
+
+    cityNetwork.displayNodes();
+    visualizeGraph();
+}
+
+window.onload = function() {
+    console.log('🚦 Intelligent Traffic Management System');
+    console.log('Initializing...');
+    initializeSystem();
+    console.log('✓ System ready!');
+};
