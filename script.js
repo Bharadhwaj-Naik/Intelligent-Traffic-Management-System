@@ -567,3 +567,23 @@ function handleAllPossibleRoutes() {
         visualizeGraph(null, source, null);
     }, 800);
 }
+
+function displayAllPossibleRoutesResults(allPaths, source) {
+    const resultsDiv = document.getElementById('results');
+
+    let html = `
+        <div class="section-header">
+            <span class="section-icon">📊</span>
+            <h3>All Possible Routes from ${cityNetwork.getNodeName(source)}</h3>
+        </div>
+        <div style="background: linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%); padding: 25px; border-radius: 18px; margin-bottom: 25px; border: 3px solid #3b82f6;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">SOURCE:</strong><br>
+                    <span style="color: #f59e0b; font-size: 1.2em; font-weight: 700;">${cityNetwork.getNodeName(source)}</span>
+                </div>
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">TOTAL DESTINATIONS:</strong><br>
+                    <span style="color: #8b5cf6; font-size: 1.5em; font-weight: 800;">${Object.keys(allPaths).length}</span>
+                </div>
+    `;
