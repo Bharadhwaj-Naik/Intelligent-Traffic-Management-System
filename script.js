@@ -228,10 +228,171 @@ const result = newPathInfo();
    nodesGrid.appendchild(nodeCard);
   }
  }
- ]
+}
  
     
 
+function initializeComplexCity(graph) {
+    // Emergency Stations
+    graph.addVertex(0, "Central Command HQ", "emergency_station");
+    graph.addVertex(1, "North Fire Station", "emergency_station");
+    graph.addVertex(2, "East Police Station", "emergency_station");
+    graph.addVertex(3, "West Hospital", "emergency_station");
+    graph.addVertex(4, "South Ambulance Base", "emergency_station");
+    
+    // Major Landmarks
+    graph.addVertex(5, "Downtown Mall", "landmark");
+    graph.addVertex(6, "City Hall", "landmark");
+    graph.addVertex(7, "Central Park", "landmark");
+    graph.addVertex(8, "Main Railway Station", "landmark");
+    graph.addVertex(9, "Airport Terminal", "landmark");
+    graph.addVertex(10, "Sports Stadium", "landmark");
+    graph.addVertex(11, "University Campus", "landmark");
+    graph.addVertex(12, "Tech Business Park", "landmark");
+    graph.addVertex(13, "Medical District", "landmark");
+    graph.addVertex(14, "Financial Center", "landmark");
+    
+    // Residential Areas
+    graph.addVertex(15, "North Residential Zone", "intersection");
+    graph.addVertex(16, "East Residential Zone", "intersection");
+    graph.addVertex(17, "West Residential Zone", "intersection");
+    graph.addVertex(18, "South Residential Zone", "intersection");
+    
+    // Commercial Districts
+    graph.addVertex(19, "Market District", "intersection");
+    graph.addVertex(20, "Shopping Plaza", "intersection");
+    graph.addVertex(21, "Restaurant Row", "intersection");
+    graph.addVertex(22, "Entertainment District", "intersection");
+    
+    // Industrial Areas
+    graph.addVertex(23, "Industrial Zone", "intersection");
+    graph.addVertex(24, "Warehouse District", "intersection");
+    graph.addVertex(25, "Factory Complex", "intersection");
+    graph.addVertex(26, "Logistics Hub", "intersection");
+    
+    // Highway Intersections
+    graph.addVertex(27, "Highway Junction North", "intersection");
+    graph.addVertex(28, "Highway Junction East", "intersection");
+    graph.addVertex(29, "Highway Junction South", "intersection");
+    graph.addVertex(30, "Highway Junction West", "intersection");
+    
+    // Bridge Crossings
+    graph.addVertex(31, "River Bridge North", "intersection");
+    graph.addVertex(32, "River Bridge South", "intersection");
+    graph.addVertex(33, "Canal Bridge East", "intersection");
+    graph.addVertex(34, "Canal Bridge West", "intersection");
+    
+    // Transit Hubs
+    graph.addVertex(35, "Metro Station Central", "intersection");
+    graph.addVertex(36, "Metro Station North", "intersection");
+    graph.addVertex(37, "Metro Station East", "intersection");
+    graph.addVertex(38, "Metro Station South", "intersection");
+    graph.addVertex(39, "Bus Terminal Main", "intersection");
+    
+    // Parks and Recreation
+    graph.addVertex(40, "Lake Park Junction", "intersection");
+    graph.addVertex(41, "Zoo Access Road", "intersection");
+    graph.addVertex(42, "Beach Road Junction", "intersection");
+    
+    // Educational Institutions
+    graph.addVertex(43, "School District", "intersection");
+    graph.addVertex(44, "College Campus", "intersection");
+
+    // ========== ROAD NETWORK CONNECTIONS ==========
+    // Emergency Station Connections
+    graph.addEdge(0, 6, 4, "Emergency Route 1");
+    graph.addEdge(0, 5, 5, "Main Street");
+    graph.addEdge(0, 35, 3, "Metro Access");
+    graph.addEdge(1, 15, 3, "North Access");
+    graph.addEdge(1, 36, 4, "Metro Link North");
+    graph.addEdge(2, 16, 3, "East Access");
+    graph.addEdge(2, 37, 4, "Metro Link East");
+    graph.addEdge(3, 17, 3, "West Access");
+    graph.addEdge(3, 13, 2, "Hospital Road");
+    graph.addEdge(4, 18, 3, "South Access");
+    graph.addEdge(4, 38, 4, "Metro Link South");
+    
+    // Downtown Core Network
+    graph.addEdge(5, 6, 3, "City Center Boulevard");
+    graph.addEdge(5, 14, 4, "Financial Avenue");
+    graph.addEdge(5, 19, 5, "Market Street");
+    graph.addEdge(6, 7, 4, "Park Avenue");
+    graph.addEdge(6, 35, 2, "Metro Direct");
+    graph.addEdge(7, 40, 6, "Lake Road");
+    graph.addEdge(7, 41, 7, "Zoo Road");
+    
+    // Major Landmarks Interconnection
+    graph.addEdge(8, 35, 2, "Station Link");
+    graph.addEdge(8, 39, 3, "Bus Connection");
+    graph.addEdge(8, 19, 5, "Market Access");
+    graph.addEdge(9, 28, 8, "Airport Highway");
+    graph.addEdge(10, 22, 4, "Entertainment Way");
+    graph.addEdge(10, 21, 5, "Stadium Road");
+    graph.addEdge(11, 44, 3, "Campus Road");
+    graph.addEdge(11, 12, 6, "Tech Corridor");
+    graph.addEdge(12, 23, 8, "Industrial Highway");
+    graph.addEdge(12, 26, 7, "Logistics Way");
+    graph.addEdge(13, 3, 2, "Medical Access");
+    graph.addEdge(13, 20, 4, "Healthcare Boulevard");
+    graph.addEdge(14, 20, 3, "Commerce Street");
+    
+    // Residential Networks
+    graph.addEdge(15, 36, 3, "Metro Residential North");
+    graph.addEdge(15, 19, 5, "Market Link North");
+    graph.addEdge(15, 27, 6, "Highway Access North");
+    graph.addEdge(16, 37, 3, "Metro Residential East");
+    graph.addEdge(16, 20, 5, "Shopping Access");
+    graph.addEdge(16, 28, 6, "Highway Access East");
+    graph.addEdge(17, 20, 5, "Market Access West");
+    graph.addEdge(17, 30, 6, "Highway Access West");
+    graph.addEdge(18, 38, 3, "Metro Residential South");
+    graph.addEdge(18, 19, 5, "Market Link South");
+    graph.addEdge(18, 29, 6, "Highway Access South");
+    
+    // Commercial District Network
+    graph.addEdge(19, 21, 4, "Restaurant Link");
+    graph.addEdge(19, 22, 4, "Entertainment Link");
+    graph.addEdge(20, 33, 5, "Canal Bridge Access East");
+    graph.addEdge(20, 34, 5, "Canal Bridge Access West");
+    graph.addEdge(21, 22, 3, "Dining Entertainment Way");
+    graph.addEdge(21, 39, 5, "Bus Terminal Link");
+    
+    // Industrial Network
+    graph.addEdge(23, 24, 4, "Warehouse Link");
+    graph.addEdge(24, 25, 5, "Factory Road");
+    graph.addEdge(25, 26, 6, "Heavy Transport Route");
+    graph.addEdge(26, 29, 8, "Industrial Highway Exit");
+    
+    // Highway Network
+    graph.addEdge(27, 28, 10, "Highway East-West Segment 1");
+    graph.addEdge(28, 29, 10, "Highway North-South Segment 1");
+    graph.addEdge(29, 30, 10, "Highway East-West Segment 2");
+    graph.addEdge(30, 27, 10, "Highway North-South Segment 2");
+    
+    // Bridge Crossings
+    graph.addEdge(31, 32, 7, "River Bridge Main");
+    graph.addEdge(31, 36, 5, "Bridge North Metro");
+    graph.addEdge(32, 38, 5, "Bridge South Metro");
+    graph.addEdge(33, 34, 6, "Canal Bridge Main");
+    graph.addEdge(33, 37, 4, "Bridge East Metro");
+    graph.addEdge(34, 35, 4, "Bridge West Metro");
+    
+    // Metro Network Integration
+    graph.addEdge(35, 36, 5, "Metro Line North");
+    graph.addEdge(36, 37, 5, "Metro Line East");
+    graph.addEdge(37, 38, 5, "Metro Line South");
+    graph.addEdge(38, 35, 5, "Metro Line West");
+    graph.addEdge(35, 39, 3, "Metro-Bus Transfer");
+    
+    // Recreation Access
+    graph.addEdge(40, 41, 4, "Park-Zoo Connector");
+    graph.addEdge(40, 42, 8, "Lake-Beach Road");
+    
+    // Educational Network
+    graph.addEdge(43, 44, 4, "School-College Link");
+    graph.addEdge(43, 15, 6, "School-Residential North");
+    graph.addEdge(44, 16, 6, "College-Residential East");
+}
  
  
  
