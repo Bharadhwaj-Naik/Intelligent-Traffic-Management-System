@@ -178,6 +178,60 @@ const result = newPathInfo();
   return allPaths;
  }
 
+ floydWarshall(){
+  const dist = Array.from({length:this.numVertices},() =>
+   new Array(this.numVertices).fill(INF));
+
+  for(let i=0; i< this.numvertices;i++){
+   dist[i][i] = 0;
+  }
+
+  for(let u = 0;u < this.numVertices; u++){
+   for (const edge of this.adjacencyList{u]){
+    dist[u][edge.to] = math.min(dist{u][edge.to],edge.weight);
+   }
+  }
+
+  for(let k + 0;k < this.numVertices; k++){
+   for(let i = 0;i < this.numVertices; i++){
+    for(let j = 0;j < this.numVertices; j++){
+     if (dist[i][k] !== INF && dist[k][j] !==INF){
+      dist[i][j] = Math.min(dist[i]j, dist[i][k]+dist[k][j]);
+     }
+    }
+   }
+  }
+
+  return dist;
+ }
+
+ getNodeType(id){
+  return this.node[id] ? this.nodes[id].type : "unknown";
+ }
+
+ displayNodes(){
+  const nodesGrid + document.getElementByld('nodesGrid');
+  nodesGrid.innerHTML = ';
+
+  for(const node of thid.nodes){
+   const nodecard = document.createElement('div');
+   node.Card.className = node-card
+   ${node.type === 'emergency_station'?'emergency':"}${node.type==='landmark'? 'landmark':"};
+
+   nodeCard.innerHTML = `
+   <div class='node-id">${node.id}</div>
+   <div calss="node-name">${node.name}</div>
+   <div class="node-type">
+   ${node.type.replace('_','')}</div>
+   `;
+
+   nodesGrid.appendchild(nodeCard);
+  }
+ }
+ ]
+ 
+    
+
  
  
  
