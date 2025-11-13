@@ -612,4 +612,35 @@ function displayAllPossibleRoutesResults(allPaths, source) {
             </thead>
             <tbody>
     `;
-    
+
+
+        for (const [dest, pathInfo] of Object.entries(allPaths)) {
+        const destNode = cityNetwork.nodes[parseInt(dest)];
+        html += `<tr>`;
+        html += `<td class="path-cell">${destNode.name}</td>`;
+        html += `<td><span style="font-size: 0.8em; padding: 4px 8px; border-radius: 6px; background: ${destNode.type === 'emergency_station' ? '#fee2e2' : destNode.type === 'landmark' ? '#dbeafe' : '#f1f5f9'}; color: ${destNode.type === 'emergency_station' ? '#dc2626' : destNode.type === 'landmark' ? '#1d4ed8' : '#475569'};">${destNode.type.replace('_', ' ')}</span></td>`;
+        
+        if (pathInfo.totalTime !== INF) {
+            html += `<td class="time-cell">${pathInfo.totalTime} min</td>`;
+            
+            let pathPreview = '';
+            for (let i = 0; i < Math.min(3, pathInfo.path.length); i++) {
+                const nodeName = cityNetwork.getNodeName(pathInfo.path[i]);
+                pathPreview += nodeName.substring(0, 15);
+                if (i < Math.min(2, pathInfo.path.length - 1)) pathPreview += ' → ';
+            }
+            if (pathInfo.path.length > 3) pathPreview += '...';
+            
+            html += `<td style="font-size: 0.9em; color: #64748b;">${pathPreview}</td>`;
+        } else {
+            html += `<td colspan="2" style="color: #ef4444; font-weight: 600;">No path available</td>`;
+        }
+        
+        html += `</tr>`;
+    }
+
+    html += `</tbody></table>`;
+
+    resultsDiv.innerHTML = html;
+    document.getElementById('resultsPanel').style.display = 'block';
+}
