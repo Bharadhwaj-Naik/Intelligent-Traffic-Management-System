@@ -74,4 +74,10 @@
                 return this.heap.length === 0;
             }
         }
-        
+        class PathInfo {
+            constructor() {
+                this.path = [];
+                this.totalTime = INF;
+                this.roads = [];
+            }
+        }
