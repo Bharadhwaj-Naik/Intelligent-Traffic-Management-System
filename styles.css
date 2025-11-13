@@ -260,3 +260,68 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+.nodes-panel {
+    background: linear-gradient(135deg, #ffffff 0%, #fef3c7 100%);
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    border: 3px solid rgba(251, 191, 36, 0.3);
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.nodes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.node-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    border-left: 5px solid #94a3b8;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.node-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.node-card.emergency {
+    border-left-color: #ef4444;
+    background: linear-gradient(135deg, #ffffff 0%, #fee2e2 100%);
+}
+
+.node-card.landmark {
+    border-left-color: #3b82f6;
+    background: linear-gradient(135deg, #ffffff 0%, #dbeafe 100%);
+}
+
+.node-id {
+    display: inline-block;
+    background: #1e293b;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.node-name {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 1.05em;
+    margin-bottom: 5px;
+}
+
+.node-type {
+    font-size: 0.8em;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
