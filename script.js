@@ -1,3 +1,99 @@
+// Add these missing class definitions at the VERY TOP of your script.js file
+const INF = Number.MAX_SAFE_INTEGER;
+
+class Node {
+    constructor(id, name, type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
+}
+
+class Edge {
+    constructor(to, weight, roadName) {
+        this.to = to;
+        this.weight = weight;
+        this.roadName = roadName;
+    }
+}
+
+class PathInfo {
+    constructor() {
+        this.totalTime = INF;
+        this.path = [];
+        this.roads = [];
+    }
+}
+
+class MinHeap {
+    constructor() {
+        this.heap = [];
+    }
+
+    push(vertex, distance) {
+        this.heap.push({ vertex, distance });
+        this.bubbleUp(this.heap.length - 1);
+    }
+
+    pop() {
+        const min = this.heap[0];
+        const end = this.heap.pop();
+        if (this.heap.length > 0) {
+            this.heap[0] = end;
+            this.sinkDown(0);
+        }
+        return min;
+    }
+
+    isEmpty() {
+        return this.heap.length === 0;
+    }
+
+    bubbleUp(idx) {
+        const element = this.heap[idx];
+        while (idx > 0) {
+            const parentIdx = Math.floor((idx - 1) / 2);
+            const parent = this.heap[parentIdx];
+            if (element.distance >= parent.distance) break;
+            this.heap[idx] = parent;
+            this.heap[parentIdx] = element;
+            idx = parentIdx;
+        }
+    }
+
+    sinkDown(idx) {
+        const length = this.heap.length;
+        const element = this.heap[idx];
+        
+        while (true) {
+            let leftChildIdx = 2 * idx + 1;
+            let rightChildIdx = 2 * idx + 2;
+            let swap = null;
+            let leftChild, rightChild;
+
+            if (leftChildIdx < length) {
+                leftChild = this.heap[leftChildIdx];
+                if (leftChild.distance < element.distance) {
+                    swap = leftChildIdx;
+                }
+            }
+
+            if (rightChildIdx < length) {
+                rightChild = this.heap[rightChildIdx];
+                if ((swap === null && rightChild.distance < element.distance) ||
+                    (swap !== null && rightChild.distance < leftChild.distance)) {
+                    swap = rightChildIdx;
+                }
+            }
+
+            if (swap === null) break;
+            this.heap[idx] = this.heap[swap];
+            this.heap[swap] = element;
+            idx = swap;
+        }
+    }
+}
+
 // ==================== GRAPH CLASS (C++ EQUIVALENT) ====================
 class TrafficGraph {
     constructor(numVertices) {
@@ -307,15 +403,13 @@ function initializeComplexCity(graph) {
     graph.addEdge(43, 15, 6, "School-Residential North");
     graph.addEdge(44, 16, 6, "College-Residential East");
 } 
-
-<<<<<<< HEAD
-
+ 
 
 
 
 
-=======
-// ==================== VISUALIZATION ====================
+
+ // ==================== VISUALIZATION ====================
 function visualizeGraph(pathInfo = null, source = null, destination = null) {
     const nodesArray = [];
     const edgesArray = [];
@@ -708,5 +802,4 @@ function displayFloydWarshallResults(distances) {
     html += `</tbody></table>`;
     resultsDiv.innerHTML = html;
     document.getElementById('resultsPanel').style.display = 'block';
-}
->>>>>>> 272113f2202162e9209f830492c80f403bf33e8b
+ }
