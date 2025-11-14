@@ -228,7 +228,7 @@ class TrafficGraph {
 
         for (const node of this.nodes) {
             const nodeCard = document.createElement('div');
-                nodeCard.className = `node-card ${node.type === 'emergency_station' ? 'emergency' : ''} ${node.type === 'landmark' ? 'landmark' : ''}`;
+            nodeCard.className = `node-card ${node.type === 'emergency_station' ? 'emergency' : ''} ${node.type === 'landmark' ? 'landmark' : ''}`;
             
             nodeCard.innerHTML = `
                 <div class="node-id">${node.id}</div>
