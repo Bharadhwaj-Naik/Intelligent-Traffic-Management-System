@@ -132,7 +132,7 @@ class TrafficGraph {
 
         for (const node of this.nodes) {
             const nodeCard = document.createElement('div');
-            nodeCard.className = `node-card ${node.type === 'emergency_station' ? 'emergency' : ''} ${node.type === 'landmark' ? 'landmark' : ''}`;
+                nodeCard.className = `node-card ${node.type === 'emergency_station' ? 'emergency' : ''} ${node.type === 'landmark' ? 'landmark' : ''}`;
             
             nodeCard.innerHTML = `
                 <div class="node-id">${node.id}</div>
@@ -308,8 +308,405 @@ function initializeComplexCity(graph) {
     graph.addEdge(44, 16, 6, "College-Residential East");
 } 
 
+<<<<<<< HEAD
 
 
 
 
 
+=======
+// ==================== VISUALIZATION ====================
+function visualizeGraph(pathInfo = null, source = null, destination = null) {
+    const nodesArray = [];
+    const edgesArray = [];
+
+    for (let i = 0; i < cityNetwork.nodes.length; i++) {
+        const node = cityNetwork.nodes[i];
+        let color = '#94a3b8';
+        let size = 20;
+
+        if (node.type === 'emergency_station') {
+            color = '#ef4444';
+            size = 30;
+        } else if (node.type === 'landmark') {
+            color = '#3b82f6';
+            size = 25;
+        }
+
+        if (source !== null && i === source) {
+            color = '#f59e0b';
+            size = 35;
+        }
+        if (destination !== null && i === destination) {
+            color = '#8b5cf6';
+            size = 35;
+        }
+
+        if (pathInfo && pathInfo.path.includes(i) && i !== source && i !== destination) {
+            color = '#10b981';
+            size = 28;
+        }
+
+        nodesArray.push({
+            id: i,
+            label: `${i}`,
+            title: node.name,
+            color: color,
+            size: size,
+            font: { size: 14, color: '#fff', face: 'Poppins', bold: true }
+        });
+    }
+
+    const addedEdges = new Set();
+    for (const [from, edgeList] of Object.entries(cityNetwork.adjacencyList)) {
+        for (const edge of edgeList) {
+            const edgeKey = `${Math.min(from, edge.to)}-${Math.max(from, edge.to)}`;
+            if (!addedEdges.has(edgeKey)) {
+                addedEdges.add(edgeKey);
+
+                let color = '#cbd5e1';
+                let width = 2;
+
+                if (pathInfo && pathInfo.path.length > 0) {
+                    for (let i = 0; i < pathInfo.path.length - 1; i++) {
+                        if ((pathInfo.path[i] == from && pathInfo.path[i + 1] == edge.to) ||
+                            (pathInfo.path[i] == edge.to && pathInfo.path[i + 1] == from)) {
+                            color = '#10b981';
+                            width = 6;
+                            break;
+                        }
+                    }
+                }
+
+                edgesArray.push({
+                    from: parseInt(from),
+                    to: edge.to,
+                    label: `${edge.weight}m`,
+                    title: edge.roadName,
+                    color: { color: color },
+                    width: width,
+                    font: { size: 11, color: '#64748b', face: 'Poppins' }
+                });
+            }
+        }
+    }
+
+    const nodes = new vis.DataSet(nodesArray);
+    const edges = new vis.DataSet(edgesArray);
+
+    const container = document.getElementById('network');
+    const data = { nodes: nodes, edges: edges };
+    const options = {
+        physics: {
+            enabled: true,
+            barnesHut: {
+                gravitationalConstant: -10000,
+                centralGravity: 0.3,
+                springLength: 200,
+                springConstant: 0.04
+            },
+            stabilization: { iterations: 250 }
+        },
+        interaction: {
+            hover: true,
+            tooltipDelay: 100,
+            dragView: true,
+            zoomView: false
+        },
+        nodes: {
+            shape: 'dot',
+            borderWidth: 3,
+            borderWidthSelected: 4
+        },
+        edges: {
+            smooth: { type: 'continuous' }
+        }
+    };
+
+    visNetwork = new vis.Network(container, data, options);
+}
+
+let cityNetwork;
+let visNetwork;
+
+// ==================== INITIALIZATION ====================
+function initializeSystem() {
+    cityNetwork = new TrafficGraph(45);
+    initializeComplexCity(cityNetwork);
+    
+    let totalEdges = 0;
+    for (const edgeList of Object.values(cityNetwork.adjacencyList)) {
+        totalEdges += edgeList.length;
+    }
+    totalEdges = totalEdges / 2;
+
+    document.getElementById('stat-roads').textContent = totalEdges;
+
+    cityNetwork.displayNodes();
+    visualizeGraph();
+}
+
+window.onload = function() {
+    console.log('🚦 Intelligent Traffic Management System');
+    console.log('Initializing...');
+    initializeSystem();
+    console.log('✓ System ready!');
+};
+
+
+
+function handleSingleRoute() {
+    const source = parseInt(document.getElementById('source').value);
+    const dest = parseInt(document.getElementById('target').value);
+
+    if (source < 0 || source > 44 || dest < 0 || dest > 44) {
+        alert('Invalid intersection IDs! Must be between 0-44.');
+        return;
+    }
+
+    if (source === dest) {
+        alert('Source and destination cannot be the same!');
+        return;
+    }
+
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('resultsPanel').style.display = 'none';
+
+    setTimeout(() => {
+        const pathInfo = cityNetwork.dijkstra(source, dest);
+        document.getElementById('loading').style.display = 'none';
+
+        if (pathInfo.totalTime === INF) {
+            alert('No path exists between these intersections!');
+            return;
+        }
+
+        visualizeGraph(pathInfo, source, dest);
+        displayRouteResults(pathInfo, source, dest);
+    }, 500);
+}
+
+
+function displayRouteResults(pathInfo, source, dest) {
+    const resultsDiv = document.getElementById('results');
+
+    let html = `
+        <div class="section-header">
+            <span class="section-icon">🛣️</span>
+            <h3>Route Details</h3>
+        </div>
+        <div style="background: linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%); padding: 25px; border-radius: 18px; margin-bottom: 25px; border: 3px solid #3b82f6;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">FROM:</strong><br>
+                    <span style="color: #f59e0b; font-size: 1.2em; font-weight: 700;">${cityNetwork.getNodeName(source)}</span>
+                </div>
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">TO:</strong><br>
+                    <span style="color: #8b5cf6; font-size: 1.2em; font-weight: 700;">${cityNetwork.getNodeName(dest)}</span>
+                </div>
+    `;
+
+
+    html += `
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">TOTAL TIME:</strong><br>
+                    <span style="color: #ef4444; font-size: 1.5em; font-weight: 800;">${pathInfo.totalTime} min</span>
+                </div>
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">INTERSECTIONS:</strong><br>
+                    <span style="color: #10b981; font-size: 1.4em; font-weight: 700;">${pathInfo.path.length}</span>
+                </div>
+            </div>
+        </div>
+
+        <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.4em;">📍 Step-by-Step Route</h3>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Step</th>
+                    <th>Location</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+        for (let i = 0; i < pathInfo.path.length; i++) {
+        const nodeId = pathInfo.path[i];
+        html += `
+            <tr>
+                <td><strong>${i + 1}</strong></td>
+                <td class="path-cell">${cityNetwork.getNodeName(nodeId)}</td>
+                <td>
+        `;
+        
+        if (i < pathInfo.roads.length) {
+            html += `Take <strong>${pathInfo.roads[i]}</strong>`;
+        } else {
+            html += `<span style="color: #10b981; font-weight: 700;">🎯 Destination Reached</span>`;
+        }
+        
+        html += `</td></tr>`;
+    }
+
+    html += `</tbody></table>`;
+    resultsDiv.innerHTML = html;
+    document.getElementById('resultsPanel').style.display = 'block';
+}
+
+function handleAllPossibleRoutes() {
+    const source = parseInt(document.getElementById('source').value);
+
+    if (source < 0 || source > 44) {
+        alert('Please enter a valid source ID (0-44)!');
+        return;
+    }
+
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('resultsPanel').style.display = 'none';
+
+    setTimeout(() => {
+        const allPaths = cityNetwork.findAllPossiblePaths(source);
+
+        document.getElementById('loading').style.display = 'none';
+        displayAllPossibleRoutesResults(allPaths, source);
+        visualizeGraph(null, source, null);
+    }, 800);
+}
+
+function displayAllPossibleRoutesResults(allPaths, source) {
+    const resultsDiv = document.getElementById('results');
+
+    let html = `
+        <div class="section-header">
+            <span class="section-icon">📊</span>
+            <h3>All Possible Routes from ${cityNetwork.getNodeName(source)}</h3>
+        </div>
+        <div style="background: linear-gradient(135deg, #f1f5f9 0%, #e0e7ff 100%); padding: 25px; border-radius: 18px; margin-bottom: 25px; border: 3px solid #3b82f6;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">SOURCE:</strong><br>
+                    <span style="color: #f59e0b; font-size: 1.2em; font-weight: 700;">${cityNetwork.getNodeName(source)}</span>
+                </div>
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">TOTAL DESTINATIONS:</strong><br>
+                    <span style="color: #8b5cf6; font-size: 1.5em; font-weight: 800;">${Object.keys(allPaths).length}</span>
+                </div>
+    `;
+
+        html += `
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">REACHABLE NODES:</strong><br>
+                    <span style="color: #10b981; font-size: 1.4em; font-weight: 700;">${Object.values(allPaths).filter(path => path.totalTime !== INF).length}</span>
+                </div>
+                <div>
+                    <strong style="color: #64748b; font-size: 0.9em;">UNREACHABLE NODES:</strong><br>
+                    <span style="color: #ef4444; font-size: 1.4em; font-weight: 700;">${Object.values(allPaths).filter(path => path.totalTime === INF).length}</span>
+                </div>
+            </div>
+        </div>
+
+        <h3 style="color: #1e293b; margin-bottom: 20px; font-size: 1.4em;">📍 All Available Routes</h3>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Destination</th>
+                    <th>Type</th>
+                    <th>Travel Time</th>
+                    <th>Route Preview</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+
+        for (const [dest, pathInfo] of Object.entries(allPaths)) {
+        const destNode = cityNetwork.nodes[parseInt(dest)];
+        html += `<tr>`;
+        html += `<td class="path-cell">${destNode.name}</td>`;
+        html += `<td><span style="font-size: 0.8em; padding: 4px 8px; border-radius: 6px; background: ${destNode.type === 'emergency_station' ? '#fee2e2' : destNode.type === 'landmark' ? '#dbeafe' : '#f1f5f9'}; color: ${destNode.type === 'emergency_station' ? '#dc2626' : destNode.type === 'landmark' ? '#1d4ed8' : '#475569'};">${destNode.type.replace('_', ' ')}</span></td>`;
+        
+        if (pathInfo.totalTime !== INF) {
+            html += `<td class="time-cell">${pathInfo.totalTime} min</td>`;
+            
+            let pathPreview = '';
+            for (let i = 0; i < Math.min(3, pathInfo.path.length); i++) {
+                const nodeName = cityNetwork.getNodeName(pathInfo.path[i]);
+                pathPreview += nodeName.substring(0, 15);
+                if (i < Math.min(2, pathInfo.path.length - 1)) pathPreview += ' → ';
+            }
+            if (pathInfo.path.length > 3) pathPreview += '...';
+            
+            html += `<td style="font-size: 0.9em; color: #64748b;">${pathPreview}</td>`;
+        } else {
+            html += `<td colspan="2" style="color: #ef4444; font-weight: 600;">No path available</td>`;
+        }
+        
+        html += `</tr>`;
+    }
+
+    html += `</tbody></table>`;
+
+    resultsDiv.innerHTML = html;
+    document.getElementById('resultsPanel').style.display = 'block';
+}
+
+
+function handleFloydWarshall() {
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('resultsPanel').style.display = 'none';
+
+    setTimeout(() => {
+        const allPairsDistances = cityNetwork.floydWarshall();
+        document.getElementById('loading').style.display = 'none';
+        displayFloydWarshallResults(allPairsDistances);
+    }, 500);
+}
+
+function displayFloydWarshallResults(distances) {
+    const resultsDiv = document.getElementById('results');
+
+    let html = `
+        <div class="section-header">
+            <span class="section-icon">🔄</span>
+            <h3>Floyd-Warshall All-Pairs Shortest Paths</h3>
+        </div>
+        <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 25px; border-radius: 18px; margin-bottom: 25px; border: 3px solid #f59e0b;">
+            <p style="color: #78350f; font-weight: 600; font-size: 1.1em;">
+                ✓ Complete distance matrix calculated successfully!<br>
+                Total computations: <strong>${45 * 45} pairs</strong>
+            </p>
+        </div>
+
+        <h3 style="color: #1e293b; margin-bottom: 20px;">Sample Results (First 10 nodes)</h3>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Distance</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    for (let i = 0; i < Math.min(10, distances.length); i++) {
+        for (let j = 0; j < Math.min(10, distances[i].length); j++) {
+            if (i !== j && distances[i][j] !== INF) {
+                html += `
+                    <tr>
+                        <td><strong>${i}</strong></td>
+                        <td><strong>${j}</strong></td>
+                        <td class="time-cell">${distances[i][j]} min</td>
+                    </tr>
+                `;
+            }
+        }
+    }
+
+    html += `</tbody></table>`;
+    resultsDiv.innerHTML = html;
+    document.getElementById('resultsPanel').style.display = 'block';
+}
+>>>>>>> 272113f2202162e9209f830492c80f403bf33e8b
