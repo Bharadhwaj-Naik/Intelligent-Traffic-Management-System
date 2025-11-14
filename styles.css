@@ -407,8 +407,7 @@ body {
     font-size: 1.2em;
     font-weight: 600;
 }
-.legend {
-
+ .legend {
     display: flex;
     gap: 25px;
     margin-top: 25px;
@@ -416,7 +415,7 @@ body {
     padding: 20px;
     background: rgba(255,255,255,0.5);
     border-radius: 15px;
-}
+} 
 
 
 .legend-item {
